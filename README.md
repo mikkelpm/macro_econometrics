@@ -56,6 +56,10 @@ Run the notebooks from within the `code/` folder. Figures are saved to `code/out
 - Global temperature and GDP data: Bilal, A., and Känzig, D. R. (2026). "[The Macroeconomic Impact of Climate Change: Global Versus Local Temperature](https://doi.org/10.1093/qje/qjag011)." *Quarterly Journal of Economics* 141(2). [Replication files](https://github.com/dkaenzig/micc_replication).
 - Oil supply news shocks: Känzig, D. R. (2021). "[The Macroeconomic Effects of Oil Supply News: Evidence from OPEC Announcements](https://doi.org/10.1257/aer.20190964)." *American Economic Review* 111(4). [Updated series](https://github.com/dkaenzig/oilsupplynews).
 
+## License
+
+My original materials are licensed under the [MIT license](LICENSE). Figures, screenshots, and data from third parties belong to their respective owners and are subject to their own terms.
+
 ## Acknowledgements
 
 This material is based upon work supported by the NSF under [Grant #2238049](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2238049) and by the Alfred P. Sloan Foundation.
