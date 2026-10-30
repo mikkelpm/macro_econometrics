@@ -1,0 +1,123 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage,enumerate,amsmath,bm,array,mathtools}
+\usepackage[onehalfspacing]{setspace}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\tr}{tr}
+\DeclareMathOperator*{\rk}{rk}
+\DeclareMathOperator*{\spa}{span}
+\DeclareMathOperator*{\ve}{vec}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Rea}{Re}
+\DeclareMathOperator*{\var}{Var}
+\DeclareMathOperator*{\cov}{Cov}
+
+\begin{document}
+
+
+\begin{center}
+{\large ECMA 31150 -- Spring 2026} \\[0.5\baselineskip]
+{\Large \bf Midterm Exam} \\[0.3\baselineskip]
+April 21, 2026 \\[0.3\baselineskip]
+Instructor: Mikkel Plagborg-Moller
+\end{center}
+
+\bigskip
+
+\begin{itemize}
+\item You have 75 minutes to complete the following 5 problems.
+\item The test is closed-book. You may consult a calculator and one double-sided sheet of handwritten notes.
+\item The total number of points is 100.
+\item The problems have not been ordered in terms of difficulty. Many of the questions can be answered independently of each other.
+\item \textbf{Show your work}. State several significant digits for every numerical answer.
+\item \textbf{Partial answers will receive partial credit.} Do not leave questions empty. However, points may be subtracted for long, irrelevant remarks.
+\item Good luck!
+\end{itemize}
+
+\clearpage
+
+\subsection*{Problem 1 (10 points total)}
+Let the time series $\lbrace y_t \rbrace$ be defined by
+\[y_t \equiv (u_t + u_{t-1})u_{t-1} \quad \text{for } t=1,2,\dots,\quad \text{where} \quad u_t \overset{iid}{\sim} N(0,1) \quad \text{for } t=0,1,2,\dots\]
+\begin{enumerate}[i)]
+\item (10 points.) Show that $\lbrace y_t \rbrace$ is covariance stationary. Derive its mean, its ACF, and its long-run variance. [Hint: the 4th moment of the standard normal distribution equals 3.]
+\end{enumerate}
+
+\subsection*{Problem 2 (20 points total)}
+Let $\lbrace y_t \rbrace$ be a covariance stationary process with autocovariance function $\gamma(\ell)\equiv \cov(y_t,y_{t-\ell})$. Let $\hat{\sigma}_y^2 \equiv \frac{1}{T-1}\sum_{t=1}^T (y_t-\bar{y})^2$ denote its sample variance, where $\bar{y} \equiv \frac{1}{T}\sum_{t=1}^T y_t$.
+
+\begin{enumerate}[i)]
+\item (12 points.) Prove that
+\[E\left[\hat{\sigma}_y^2\right] = \gamma(0) - \frac{2}{T-1}\sum_{\ell=1}^{T-1} \left(1-\frac{\ell}{T}\right) \gamma(\ell).\]
+[Hint: it is without loss of generality to assume $E[y_t]=0$.]
+\item (8 points.) Give a concrete example of a covariance stationary model for $\lbrace y_t \rbrace$ such that $\hat{\sigma}_y^2$ is a strictly \emph{downward-biased} estimator of the population variance $\gamma(0)$.
+\end{enumerate}
+
+\subsection*{Problem 3 (20 points total)}
+Consider the AR(2) process
+\[y_t = -2 - \tfrac{1}{4}y_{t-1} + \tfrac{1}{8}y_{t-2} + u_t,\]
+where $\lbrace u_t \rbrace$ is a white noise process with variance 2, and $E[u_t \mid \lbrace y_s \rbrace_{s<t}]=0$.
+
+\begin{enumerate}[i)]
+\item (8 points.) Verify that the process is covariance stationary, provided the initial values have appropriate moments. [Note: you do not need to derive the required moments of the initial values.]
+\item (12 points.) Give an explicit formula for the optimal two-step-ahead forecast $y_{T+2|T} \equiv E[y_{T+2} \mid \lbrace y_s \rbrace_{s \leq T}]$? What is the associated RMSFE?
+\end{enumerate}
+
+\subsection*{Problem 4 (26 points total)}
+We have $T=196$ observations of two time series $\lbrace y_t,x_t \rbrace$. We assume an ADL model for $y_t$ with two autoregressive lags and one distributed lag of $x_t$. A regression produces the following output:
+\medskip
+
+{\small \setstretch{0.9}
+\begin{verbatim}
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.469
+Model:                            OLS   Adj. R-squared:                  0.460
+Method:                 Least Squares   F-statistic:                     49.42
+Date:                Tue, 21 Apr 2026   Prob (F-statistic):           1.18e-23
+Time:                        11:00:00   Log-Likelihood:                -274.71
+No. Observations:                 194   AIC:                             557.4
+Df Residuals:                     190   BIC:                             570.5
+Df Model:                           3                                         
+Covariance Type:                  HC1                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         -0.0101      0.072     -0.140      0.889      -0.152       0.132
+y_lag1         0.6422      0.070      9.172      0.000       0.505       0.779
+y_lag2        -0.0719      0.062     -1.156      0.247      -0.194       0.050
+x_lag1         0.1971      0.053      3.728      0.000       0.093       0.301
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity robust (HC1)
+\end{verbatim}
+}
+
+\begin{enumerate}[i)]
+\item (6 points.) Suppose the last observations in the data set are $y_T = 1$, $x_T = 0$, $y_{T-1}=-1$, $x_{T-1}=3$. What is the optimal forecast of $y_{T+1}$?
+\item (6 points.) Propose a null hypothesis for the model coefficients under which $\lbrace y_t \rbrace$ is white noise. Then test this hypothesis, using a 5\% significance level. [Note: if you're unsure how to use the regression output to answer this question, you will receive full points if you provide a detailed general description of how to conduct the test.]
+\item (6 points.) Test whether $\lbrace x_t \rbrace$ Granger-causes $\lbrace y_t \rbrace$, using a 10\% significance level.
+\item (8 points.) Assume that $\lbrace y_t,x_t\rbrace$ are jointly covariance stationary. Treating the above coefficient estimates as exact rather than estimated, derive an expression for $E[y_t]$ as a function of $E[x_t]$.
+\end{enumerate}
+
+\subsection*{Problem 5 (24 points total)}
+Indicate whether each of the following statements is \underline{true} or \underline{false}. Justify your answer with a very brief argument.
+
+\begin{enumerate}[i)]
+\item (8 points.) Suppose we observe a sample of size $T$ from the time series $\lbrace \tilde{y}_t \rbrace$ given by $\tilde{y}_t \equiv (1-\tfrac{1}{2}L)^{-1}y_t$, where $\lbrace y_t \rbrace$ follows a stationary AR(1) process with non-zero AR coefficient. Then the BIC procedure will select 2 lags with arbitrarily high probability as $T \to \infty$.
+
+\item (8 points.) A bivariate VAR(1) process with coefficient matrix
+\[\bm{A} = \begin{pmatrix}
+0.8 & 0 \\
+1.5 & -0.3
+\end{pmatrix}\]
+is covariance stationary (provided the initial value has appropriate moments).
+
+\item (8 points.) If we run the recursive residual bootstrap for a VAR(1) model, using a very large number of iterations, then the sample average of the bootstrap draws $\hat{A}_{ij}^*$ will be very close to the real-data parameter estimate $\hat{A}_{ij}$. [Note: an informal argument suffices for this question.]
+\end{enumerate}
+
+
+\end{document}
+ 

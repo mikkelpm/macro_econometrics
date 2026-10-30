@@ -1,0 +1,102 @@
+\documentclass[compress]{beamer}
+\usecolortheme{default}
+
+\usepackage{lmodern, epstopdf, multirow, array, setspace, bbm, tcolorbox, pbox, bm, mathtools, tikz}
+\usepackage[T1]{fontenc}
+
+\setbeamertemplate{frametitle}[default][center]
+\setbeamertemplate{footline}{\hfill \insertframenumber/\inserttotalframenumber\hspace*{5pt}\vspace{5pt}}
+\setbeamertemplate{navigation symbols}{}
+
+\newlength{\wideitemsep}
+\setlength{\wideitemsep}{\itemsep}
+\addtolength{\wideitemsep}{4pt}
+\let\olditem\item
+\renewcommand{\item}{\setlength{\itemsep}{\wideitemsep}\olditem}
+\setlength{\leftmargini}{12pt}
+\setlength{\leftmarginii}{14pt}
+\setbeamertemplate{itemize/enumerate subbody begin}{\vspace{6pt}}
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{enumerate item}[circle]
+\setbeamertemplate{enumerate subitem}[default]
+
+\setbeamercolor{alerted text}{fg=blue}
+\setbeamersize{text margin left=1.5em,text margin right=1.5em}
+
+\tcbset{
+    colback=white,
+    colframe=black,
+    coltext=black,
+    coltitle=blue,
+    colbacktitle=white,
+    boxrule=1pt,
+    titlerule=0pt,
+    toptitle=4pt,
+    top=2pt
+}
+
+\newenvironment{changemargin}[2]{% 
+  \begin{list}{}{% 
+    \setlength{\topsep}{0pt}% 
+    \setlength{\leftmargin}{#1}% 
+    \setlength{\rightmargin}{#2}% 
+    \setlength{\listparindent}{\parindent}% 
+    \setlength{\itemindent}{\parindent}% 
+    \setlength{\parsep}{\parskip}% 
+  }% 
+  \item[]}{\end{list}}
+  
+\newenvironment{defn}{%
+  \begin{tcolorbox}[title={Definition}]%
+  }{\end{tcolorbox}}
+  
+\newenvironment{prop}[1]{%
+  \begin{tcolorbox}[title={Proposition #1}]%
+  }{\end{tcolorbox}}
+  
+\newcommand{\cit}[1]{{\footnotesize \textcolor[rgb]{0.5,0,0}{#1}}}
+
+% Font size for code listings (verbatim blocks); reset with \normalsize
+\newcommand{\codesize}{\fontsize{7}{8.5}\selectfont}
+
+\newcommand{\slidesetup}[1]{%
+  \title{#1}%
+  \subtitle{\texorpdfstring{\vspace{0.3\baselineskip}}{} {\small This version: \today}}%
+  \author[Mikkel Plagborg-Moller]{ECMA 31150, Spring 2026 \texorpdfstring{\\[0.5ex]}{} University of Chicago \texorpdfstring{\\[0.5ex]}{} Department of Economics \texorpdfstring{\\[4ex]}{} Mikkel Plagborg-Moller}%
+  \date{}%
+}
+
+% \circleoverlay[options]{text}
+% Draws a red circle with a text box nearby on a tikz overlay.
+% Options (with defaults):
+%   cx=0cm, cy=0cm      - circle center (shift from page center)
+%   r=1cm               - circle radius
+%   tx=0cm, ty=0cm      - text box offset from circle center
+%   text anchor=east    - anchor of text node (east = text left, west = text right)
+%   font=\normalsize    - font size for text
+\pgfkeys{
+  /circleoverlay/.cd,
+  cx/.store in=\cocx, cx=0cm,
+  cy/.store in=\cocy, cy=0cm,
+  r/.store in=\cor, r=1cm,
+  tx/.store in=\cotx, tx=0cm,
+  ty/.store in=\coty, ty=0cm,
+  text anchor/.store in=\cotextanchor, text anchor=east,
+  font/.store in=\cofont, font=\normalsize,
+}
+\newcommand{\circleoverlay}[2][]{%
+  \pgfkeys{/circleoverlay/.cd, cx=0cm, cy=0cm, r=1cm, tx=0cm, ty=0cm, text anchor=east, font=\normalsize, #1}%
+  \pgfmathsetlengthmacro{\circlediameter}{2*\cor}%
+  \node[draw=red, line width=2pt, circle, minimum size=\circlediameter, inner sep=0pt]
+    (tmpcirc) at ([xshift=\cocx,yshift=\cocy]current page.center) {};%
+  \node[anchor=\cotextanchor, fill=white, draw=red, text=red, inner sep=4pt, align=left, font=\cofont]
+    at ([xshift=\cotx,yshift=\coty]tmpcirc.center) {#2};%
+}
+
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\cov}{Cov}
+\DeclareMathOperator{\corr}{Corr}
+\DeclareMathOperator{\lrv}{LRV}

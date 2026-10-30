@@ -1,0 +1,470 @@
+\input{../header.tex}
+
+\slidesetup{Inference with weakly dependent data II}
+
+\begin{document}
+\frame{
+\maketitle
+}
+
+\frame{
+\frametitle{Plan for this slide deck}
+\begin{enumerate}
+\item New Keynesian Phillips curve
+\item IV regression with HAC standard errors
+\item Weak instruments
+\item Consumption Euler equation
+\end{enumerate}
+}
+
+\frame{
+\frametitle{Phillips curve: prediction vs.\ causality}
+\begin{itemize}
+\item The Phillips curve we estimated in the previous lecture was a predictive relationship.
+\item There is no reason to believe any correlation (or lack thereof) would be causal.
+\item Inflation and unemployment could be correlated simply because they are both caused by the same underlying economic shocks (e.g., monetary policy). When unemployment rises/falls, we're not holding everything else constant.
+\item In this lecture, we will discuss how to estimate a more modern, causal version of the Phillips curve, guided by economic theory.
+\end{itemize}
+}
+
+\frame{
+\frametitle{Nominal rigidities}
+\begin{itemize}
+\item Many modern theoretical macro models assume that firms face \textbf{nominal rigidities} when setting their prices.
+\item This means that they do not optimally change their prices every period, even when business conditions change.
+\begin{itemize}
+\item Could reflect inattention, physical costs of changing prices (``menu costs''), or fear of upsetting customers.
+\end{itemize}
+\item In periods when firms set their price optimally, they do so based on expectations of business conditions over the next several periods (since they may not get to re-optimize prices again for a while).
+\item In periods where firms do not set an optimal price, they might passively pro-rate their price using past inflation.
+\end{itemize}
+}
+
+\frame{
+\frametitle{New Keynesian Phillips curve}
+\begin{itemize}
+\item Due to the nominal rigidities, these models often imply a structural/causal equation of the following form, called the \textbf{new Keynesian Phillips curve} (NKPC):
+\[\pi_t = c + \gamma_f E_t[\pi_{t+1}] + \gamma_b \pi_{t-1} + \lambda \chi_t + u_t.\]
+\vspace{-1.3\baselineskip}
+\begin{itemize}
+\item $\pi_t$: inflation
+\item $E_t[\pi_{t+1}]$: expected next-period inflation
+\item $\chi_t$: measure of economic slack (say, the unemployment rate)
+\item $u_t$: cost-push shock (e.g., oil price shock)
+\end{itemize}
+\item $\gamma_f$ and $\gamma_b$ measure the extent of forward-looking or backward-looking price setting behavior.
+\item $\lambda$ (the slope of the NKPC) measures the feedback from the real economy to inflation.
+\end{itemize}
+}
+
+\frame{
+\frametitle{NKPC: estimation}
+\[\pi_t = c + \gamma_f E_t[\pi_{t+1}] + \gamma_b \pi_{t-1} + \lambda \chi_t + u_t\]
+\begin{itemize}
+\item We would like to estimate the parameters of this equation, as they are important inputs into economic policy.
+\item But we can't just run an OLS regression of inflation on the right-hand-side variables, for two reasons:
+\begin{enumerate}
+\item We do not directly observe the expectation $E_t[\pi_{t+1}]$. (Firms may make different forecasts from households or professional forecasters.)
+\item The cost-push shock $u_t$ may be correlated with $E_t[\pi_{t+1}]$ and $\chi_t$, so these covariates are endogenous.
+\end{enumerate}
+\item We'll have to use a different estimation approach.
+\end{itemize}
+}
+
+\frame{
+\frametitle{NKPC: estimation (cont.)}
+\[\pi_t = c + \gamma_f E_t[\pi_{t+1}] + \gamma_b \pi_{t-1} + \lambda \chi_t + u_t\]
+\vspace{-0.5\baselineskip}
+\begin{itemize}
+\item Define the one-step-ahead forecast error $\eta_{t+1} \equiv \pi_{t+1}-E_t[\pi_{t+1}]$.
+\item Substitute $E_t[\pi_{t+1}] = \pi_{t+1}-\eta_{t+1}$ in the NKPC:
+\[\pi_t = c + \gamma_f \pi_{t+1} + \gamma_b \pi_{t-1} + \lambda \chi_t + v_t,\quad \text{where}\quad v_t \equiv u_t - \gamma_f \eta_{t+1}.\]
+\item We make two key assumptions:
+\begin{enumerate}
+\item The cost-push shock $u_t$ is unpredictable by past data: $E[u_t z_{t-\ell}]=0$ for $\ell \geq 1$, where $\lbrace z_t \rbrace$ is any macro time series.
+\item Firms' expectations are \textbf{rational}, so the forecast errors are unpredictable by past data: $E[\eta_{t+1}z_{t-\ell}]=0$ for $\ell \geq 0$.
+\end{enumerate}
+\item \alert{Exercise:} show these assumptions imply $E[v_tz_{t-\ell}]=0$ for all $\ell \geq 1$.
+\end{itemize}
+}
+
+\frame{
+\frametitle{NKPC: estimation (cont.)}
+\[\pi_t = c + \gamma_f \pi_{t+1} + \gamma_b \pi_{t-1} + \lambda \chi_t + v_t,\]
+\[E[v_tz_{t-\ell}]=0 \quad \text{for all}\quad \ell \geq 1\]
+\begin{itemize}
+\item In summary: though the covariates $\pi_{t+1}$ and $\chi_t$ may not be uncorrelated with $v_t$, any lagged variable $z_{t-\ell}$ is.
+\item This suggests using lagged variables as \textbf{instrumental variables} (IVs).
+\item Let's review IV regression and think about how it can be adapted to time series data\dots
+\end{itemize}
+}
+
+\frame{
+\frametitle{IV regression}
+\begin{itemize}
+\item Consider a structural outcome equation
+\[y_t = \beta_0 + \beta_1 x_{1t} + \dots + \beta_k x_{kt} + v_t.\]
+\item We observe $r$ instruments $z_{1t},\dots,z_{rt}$ and assume the \textbf{exogeneity conditions}
+\[E[v_t]=0 \quad \text{and} \quad E[z_{jt}v_t] = 0,\; \text{for } j=1,\dots,r.\]
+\item In vector notation:
+\[y_t = \bm{x}_t'\bm{\beta} + v_t,\quad E[\bm{z}_tv_t]=\bm{0},\quad \text{where}\]
+\[\overset{(k+1)\times 1\phantom{\Big|}}{\bm{\beta}} \equiv \begin{pmatrix}
+\beta_0 \\
+\beta_1 \\
+\vdots \\
+\beta_k
+\end{pmatrix},\quad \overset{(k+1)\times 1\phantom{\Big|}}{\bm{x}_t} \equiv \begin{pmatrix}
+1 \\
+x_{1t} \\
+\vdots \\
+x_{kt}
+\end{pmatrix},\quad \overset{(r+1)\times 1\phantom{\Big|}}{\bm{z}_t} \equiv \begin{pmatrix}
+1 \\
+z_{1t} \\
+\vdots \\
+z_{rt}
+\end{pmatrix}.\]
+\end{itemize}
+}
+
+\frame{
+\frametitle{Example: NKPC}
+\[y_t = \bm{x}_t'\bm{\beta} + v_t,\quad E[\bm{z}_tv_t]=\bm{0}\]
+\medskip
+\[y_t = \pi_t, \quad \bm{x}_t = \begin{pmatrix}
+1 \\
+\pi_{t+1} \\
+\chi_t \\
+\pi_{t-1}
+\end{pmatrix},\quad \bm{z}_t = \begin{pmatrix}
+1 \\
+\pi_{t-1} \\
+\chi_{t-1} \\
+\pi_{t-2} \\
+\chi_{t-2} \\
+\pi_{t-3} \\
+\chi_{t-3} \\
+\vdots
+\end{pmatrix}\] \\
+\bigskip
+($\bm{z}_t$ could also include lags of variables other than $\pi_t$ and $\chi_t$.)
+}
+
+\frame{
+\frametitle{IV regression: identification}
+\[y_t = \bm{x}_t'\bm{\beta} + v_t,\quad E[\bm{z}_tv_t]=\bm{0}\]
+\begin{itemize}
+\item Notice that
+\[E[\bm{z}_ty_t] = E[\bm{z}_t(\bm{x}_t'\bm{\beta} + v_t)] = E[\bm{z}_t \bm{x}_t'] \bm{\beta} + E[\bm{z}_t v_t] = E[\bm{z}_t \bm{x}_t'] \bm{\beta}.\]
+\item So if $\bm{\Pi}$ is a $(k+1) \times (r+1)$ matrix,
+\[\bm{\Pi}E[\bm{z}_ty_t] = \bm{\Pi}E[\bm{z}_t \bm{x}_t'] \bm{\beta} \quad \Longrightarrow \quad \bm{\beta} = \left(\bm{\Pi}E[\bm{z}_t \bm{x}_t']\right)^{-1} \bm{\Pi}E[\bm{z}_ty_t],\]
+provided that the $(k+1) \times (k+1)$ matrix $\bm{\Pi}E[\bm{z}_t \bm{x}_t']$ is non-singular.
+\end{itemize}
+}
+
+\frame{
+\frametitle{2SLS}
+\[\bm{\beta} = \left(\bm{\Pi}E[\bm{z}_t \bm{x}_t']\right)^{-1} \bm{\Pi}E[\bm{z}_ty_t]\]
+\vspace{-\baselineskip}
+\begin{itemize}
+\item Conventional choice:
+\[\bm{\Pi} \equiv E[\bm{x}_t\bm{z}_t']\left(E[\bm{z}_t\bm{z}_t']\right)^{-1}.\]
+\item Then $\bm{\Pi}E[\bm{z}_t \bm{x}_t']$ is non-singular if and only if the $(r+1) \times (k+1)$ matrix $E[\bm{z}_t \bm{x}_t']$ has full column rank (the \textbf{relevance condition}).
+\begin{itemize}
+\item Necessary condition 1: $r \geq k$.
+\item Necessary condition 2: each of the covariates $x_{1t},\dots,x_{kt}$ must be at least somewhat predictable by the IVs $z_{1t},\dots,z_{rt}$.
+\end{itemize}
+\item Suggests the \textbf{two-stage least squares} (2SLS) estimator
+\[\hat{\bm{\beta}}_\text{2SLS} \equiv \left(\hat{\bm{\Pi}}\sum_{t=1}^T\bm{z}_t \bm{x}_t'\right)^{-1} \hat{\bm{\Pi}}\sum_{t=1}^T\bm{z}_ty_t,\; \text{where} \; \hat{\bm{\Pi}} \equiv \sum_{t=1}^T\bm{x}_t\bm{z}_t'\left(\sum_{t=1}^T\bm{z}_t\bm{z}_t'\right)^{-1}.\]
+\end{itemize}
+}
+
+\frame{
+\frametitle{2SLS (cont.)}
+\[\hat{\bm{\beta}}_\text{2SLS} \equiv \left(\hat{\bm{\Pi}}\sum_{t=1}^T\bm{z}_t \bm{x}_t'\right)^{-1} \hat{\bm{\Pi}}\sum_{t=1}^T\bm{z}_ty_t,\quad \hat{\bm{\Pi}} \equiv \sum_{t=1}^T\bm{x}_t\bm{z}_t'\left(\sum_{t=1}^T\bm{z}_t\bm{z}_t'\right)^{-1}\]
+\begin{itemize}
+\item Recall from a previous econometrics course that the estimator can be computed in two stages (hence the name):
+\begin{enumerate}
+\item For each covariate $j=1,\dots,k$: run the \textbf{first-stage} OLS regression of $x_{jt}$ on $z_{1t},\dots,z_{rt}$; store the fitted values $\lbrace \hat{x}_{jt} \rbrace_{t=1}^T$.
+\smallskip
+\begin{itemize}
+\item The coefficients in the $j$-th first-stage regression are the elements in the $j$-th row of $\hat{\bm{\Pi}}$.
+\end{itemize}
+\item Run the \textbf{second-stage} OLS regression of $y_t$ on $\hat{x}_{1t},\dots,\hat{x}_{kt}$; the coefficients are the elements of $\hat{\bm{\beta}}_\text{2SLS}$.
+\end{enumerate}
+\item In practice, we make software do all this for us.
+\end{itemize}
+}
+
+\frame{
+\frametitle{2SLS: asymptotic distribution}
+\begin{itemize}
+\item Consider the case $k=r=1$ with no intercept:
+\[y_t = \beta x_t + v_t,\quad E[z_tv_t]=0.\]
+\item Then
+\[\hat{\beta}_\text{2SLS} = \frac{\sum_{t=1}^T y_tz_t}{\sum_{t=1}^T x_tz_t} = \beta + \frac{\sum_{t=1}^T v_tz_t}{\sum_{t=1}^T x_tz_t}\]
+\[\Longrightarrow \quad \sqrt{T}(\hat{\beta}_\text{2SLS}-\beta) = \frac{\frac{1}{\sqrt{T}}\sum_{t=1}^T v_tz_t}{\frac{1}{T}\sum_{t=1}^T x_tz_t}.\]
+\item Assuming weakly dependent data, the numerator satisfies a CLT and the denominator a LLN.
+\end{itemize}
+}
+
+\frame{
+\frametitle{2SLS: asymptotic distribution (cont.)}
+\begin{itemize}
+\item So the 2SLS estimator is approximately normal in large samples:
+\[\sqrt{T}(\hat{\beta}_\text{2SLS}-\beta) = \frac{\frac{1}{\sqrt{T}}\sum_{t=1}^T v_tz_t}{\frac{1}{T}\sum_{t=1}^T x_tz_t} \overset{d}{\to} N\left(0, \frac{\lrv(v_tz_t)}{\left(E[x_tz_t]\right)^2} \right).\]
+\item Standard errors:
+\[\mathit{SE}(\hat{\beta}_\text{2SLS}) = \sqrt{\frac{1}{T} \times \frac{\widehat{LRV}}{\left(\frac{1}{T}\sum_{t=1}^T x_tz_t\right)^2}},\]
+where $\widehat{LRV}$ is a HAC estimator applied to $\lbrace \hat{v}_tz_t \rbrace$, with $\hat{v}_t \equiv y_t - \hat{\beta}_\text{2SLS}x_t$.
+\item These arguments can be extended to the case with general $k \leq r$. In practice, statistical software packages have built-in 2SLS routines.
+\end{itemize}
+}
+
+\begin{frame}[fragile]
+Let's estimate the NKPC!
+\bigskip
+
+\scriptsize
+\begin{verbatim}
+from linearmodels.iv import IV2SLS
+
+# Load data
+df_cpi = pd.read_csv('data/CPIAUCSL.csv', index_col='observation_date',
+    parse_dates=True)
+df_unemp = pd.read_csv('data/UNRATE.csv', index_col='observation_date',
+    parse_dates=True)
+
+# Merge and interpolate missing values in Oct 2025
+df = df_cpi.join(df_unemp, how='inner').interpolate()
+
+# Compute annualized month-over-month inflation
+df['infl'] = 1200 * np.log(df['CPIAUCSL']).diff()
+df = df.dropna()
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\scriptsize
+\begin{verbatim}
+# Prepare variables
+nlag_iv = 3
+
+df_iv = df.assign(
+    infl_lead=df['infl'].shift(-1),
+    **{f'infl_lag{l}':   df['infl'].shift(l)   for l in range(1, nlag_iv + 1)},
+    **{f'UNRATE_lag{l}': df['UNRATE'].shift(l) for l in range(1, nlag_iv + 1)},
+).dropna()
+df_iv = sm.add_constant(df_iv)
+
+instr_cols = [f'infl_lag{l}'   for l in range(2, nlag_iv + 1)] \
+           + [f'UNRATE_lag{l}' for l in range(1, nlag_iv + 1)]
+
+# IV regression
+T = len(df_iv)
+nw_bw = int(np.ceil(0.75 * T**(1/3)))
+
+result = IV2SLS(
+    dependent=df_iv['infl'],
+    exog=df_iv[['const', 'infl_lag1']],
+    endog=df_iv[['infl_lead', 'UNRATE']],
+    instruments=df_iv[instr_cols],
+).fit(cov_type='kernel', bandwidth=nw_bw - 1)
+print(result)
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\scriptsize
+\begin{verbatim}
+                          IV-2SLS Estimation Summary                          
+==============================================================================
+Dep. Variable:                   infl   R-squared:                      0.4385
+Estimator:                    IV-2SLS   Adj. R-squared:                 0.4366
+No. Observations:                 933   F-statistic:                    1041.4
+Date:                Wed, Apr 15 2026   P-value (F-stat)                0.0000
+Time:                        23:12:23   Distribution:                  chi2(3)
+Cov. Estimator:                kernel                                         
+                                                                              
+                             Parameter Estimates                              
+==============================================================================
+            Parameter  Std. Err.     T-stat    P-value    Lower CI    Upper CI
+------------------------------------------------------------------------------
+const         -0.0199     0.1733    -0.1148     0.9086     -0.3596      0.3198
+infl_lag1      0.2772     0.0947     2.9264     0.0034      0.0915      0.4628
+infl_lead      0.7316     0.1554     4.7078     0.0000      0.4270      1.0363
+UNRATE        -0.0016     0.0279    -0.0572     0.9544     -0.0563      0.0531
+==============================================================================
+
+Endogenous: infl_lead, UNRATE
+Instruments: infl_lag2, infl_lag3, UNRATE_lag1, UNRATE_lag2, UNRATE_lag3
+Kernel Covariance (HAC)
+Debiased: False
+Kernel: bartlett
+Automatic Bandwidth: False
+Bandwidth: 7
+\end{verbatim}
+\end{frame}
+
+\frame{
+\frametitle{Syntax}
+\begin{itemize}
+\item Notice the terminology in the {\tt IV2SLS} function:
+\begin{itemize}
+\item {\tt dependent}: $y_t$.
+\item {\tt exog}: variables in $\bm{x}_t$ that are also in $\bm{z}_t$ (includes at least the intercept).
+\item {\tt endog}: variables in $\bm{x}_t$ that are not in $\bm{z}_t$.
+\item {\tt instruments}: variables in $\bm{z}_t$ that are not in $\bm{x}_t$.
+\end{itemize}
+\item Other software (e.g., Stata) uses similar terminology.
+\end{itemize}
+}
+
+\begin{frame}[fragile]
+\footnotesize
+\begin{verbatim}
+# Test the restriction gamma_f = gamma_b
+print(result.wald_test(formula='infl_lead = infl_lag1'))
+\end{verbatim}
+\bigskip
+\normalsize \textbf{Result:}
+\footnotesize
+\begin{verbatim}
+Linear Equality Hypothesis Test
+H0: Linear equality constraint is valid
+Statistic: 3.3525
+P-value: 0.0671
+Distributed: chi2(1)
+\end{verbatim}
+\end{frame}
+
+\frame{
+\frametitle{Weak instruments}
+\begin{itemize}
+\item When the relevance condition is close to failing, the 2SLS estimator may be very non-normally distributed in finite samples.
+\item Conventional SEs/CIs/tests can be highly inaccurate in this case.
+\item Intuitively, if the IVs collectively have little predictive power for some of the covariates, then there is no way to isolate sufficient exogenous variation in the latter to reliably identify causal effects.
+\item It's customary to diagnose weak IV problems with \textbf{first-stage F-statistics}:
+\begin{itemize}
+\item In each first-stage regression for endogenous covariates, compute the F-stat for the hypothesis that all the IVs $\bm{z}_t$ (except those also included in $\bm{x}_t$) have coefficients = 0.
+\item If F-stat < 10, the IVs are weak.
+\end{itemize}
+\item Warning: this is far from foolproof. Just a ``rule of thumb''.
+\end{itemize}
+}
+
+\begin{frame}[fragile]
+\codesize
+\begin{verbatim}
+=== First stage: UNRATE ===
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                 UNRATE   R-squared:                       0.942
+...                                       
+===============================================================================
+                  coef    std err          z      P>|z|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const           0.1723      0.107      1.610      0.107      -0.037       0.382
+infl_lag1      -0.0068      0.008     -0.822      0.411      -0.023       0.009
+infl_lag2       0.0025      0.003      0.730      0.465      -0.004       0.009
+infl_lag3       0.0043      0.005      0.915      0.360      -0.005       0.014
+UNRATE_lag1     1.0141      0.063     16.145      0.000       0.891       1.137
+UNRATE_lag2    -0.0691      0.076     -0.911      0.362      -0.218       0.079
+UNRATE_lag3     0.0247      0.088      0.280      0.780      -0.148       0.198
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC)
+using 7 lags and without small sample correction
+
+F-stat on instruments (infl_lag2, infl_lag3, UNRATE_lag1, UNRATE_lag2, UNRATE_lag3):
+<F test: F=1738.038020505514, p=0.0, df_denom=926, df_num=5>
+\end{verbatim}
+\uncover<2>{%
+\begin{tikzpicture}[overlay, remember picture]
+  \circleoverlay[cx=-4.25cm, cy=-2.75cm, r=0.6cm,
+                 tx=0.7cm, ty=0.7cm, text anchor=west]{Strong!}
+\end{tikzpicture}%
+}
+\end{frame}
+
+\begin{frame}[fragile]
+\codesize
+\begin{verbatim}
+=== First stage: infl_lead ===
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              infl_lead   R-squared:                       0.249
+...                                       
+===============================================================================
+                  coef    std err          z      P>|z|      [0.025      0.975]
+-------------------------------------------------------------------------------
+const           0.8169      0.429      1.903      0.057      -0.025       1.658
+infl_lag1       0.3301      0.044      7.431      0.000       0.243       0.417
+infl_lag2       0.1047      0.049      2.131      0.033       0.008       0.201
+infl_lag3       0.1459      0.053      2.746      0.006       0.042       0.250
+UNRATE_lag1     0.3956      0.254      1.559      0.119      -0.102       0.893
+UNRATE_lag2    -0.2766      0.359     -0.772      0.440      -0.979       0.426
+UNRATE_lag3    -0.0163      0.448     -0.036      0.971      -0.895       0.863
+==============================================================================
+
+Notes:
+[1] Standard Errors are heteroscedasticity and autocorrelation robust (HAC)
+using 7 lags and without small sample correction
+
+F-stat on instruments (infl_lag2, infl_lag3, UNRATE_lag1, UNRATE_lag2, UNRATE_lag3):
+<F test: F=4.960382068782446, p=0.00017281232129073444, df_denom=926, df_num=5>
+\end{verbatim}
+\uncover<2>{%
+\begin{tikzpicture}[overlay, remember picture]
+  \circleoverlay[cx=-4.25cm, cy=-2.75cm, r=0.6cm,
+                 tx=0.7cm, ty=0.7cm, text anchor=west]{Weak!}
+\end{tikzpicture}%
+}
+\end{frame}
+
+\frame{
+\frametitle{Weak instruments: solutions}
+\begin{itemize}
+\item One could look for different instrument sets with higher first-stage F-stats. But the fundamental problem for NKPC estimation is that we don't know many variables that Granger-cause inflation.
+\item Instead, there exist procedures for constructing confidence sets that are robust to the strength of the IVs.
+\item These \textbf{weak-IV-robust} procedures often lead to large confidence sets, but they could still be informative in some settings.
+\item Details on the reading list: Mavroeidis, Plagborg-Moller \& Stock (2014); Andrews, Stock \& Sun (2019).
+\end{itemize}
+}
+
+\frame{
+\frametitle{Consumption Euler equation}
+\begin{itemize}
+\item Many structural macro models also imply an optimality condition for aggregate consumption called the \textbf{consumption Euler equation}:
+\[y_t = c + \delta_f E_t[y_{t+1}] + \delta_b y_{t-1} - \tau(i_t - E_t[\pi_{t+1}]) + u_t. \]
+\vspace{-1.3\baselineskip}
+\begin{itemize}
+\item $y_t$: consumption (sometimes substituted with GDP)
+\item $i_t$: nominal interest rate
+\item $\pi_t$: inflation
+\item $u_t$: demand shock
+\end{itemize}
+\item $\delta_f-\delta_b$ measures the extent of forward-looking behavior versus habits.
+\item $\tau$: elasticity of intertemporal substitution.
+\item Can be estimated in a similar way to the NKPC (problem set).
+\end{itemize}
+}
+
+\frame{
+\frametitle{What did we learn?}
+\begin{itemize}
+\item IV regression with HAC standard errors
+\item Weak instruments
+\item Applications: NKPC, consumption Euler equation
+\end{itemize}
+}
+
+\frame{
+\frametitle{Looking ahead}
+\begin{itemize}
+\item How can we estimate the causal effects of economic policies or changes to economic fundamentals?
+\item Do we always need theoretical model equations (like the NKPC), or can we do causal inference with fewer theoretical assumptions?
+\end{itemize}
+}
+
+\end{document}

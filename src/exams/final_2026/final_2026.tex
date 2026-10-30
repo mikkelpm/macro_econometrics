@@ -1,0 +1,204 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage,enumerate,amsmath,amssymb,bm,array,mathtools}
+\usepackage[onehalfspacing]{setspace}
+
+\usepackage{listings}
+
+\lstset{
+    numbers=left,
+    numberstyle=\tiny,
+    basicstyle=\ttfamily\small,
+    breaklines=false,
+    frame=single,
+	literate={~}{{\raisebox{-3pt}{\textasciitilde}}}{1} % fix vertical location of tildes
+}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\tr}{tr}
+\DeclareMathOperator*{\rk}{rk}
+\DeclareMathOperator*{\spa}{span}
+\DeclareMathOperator*{\ve}{vec}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Rea}{Re}
+\DeclareMathOperator*{\var}{Var}
+\DeclareMathOperator*{\cov}{Cov}
+
+\begin{document}
+
+
+\begin{center}
+{\large ECMA 31150 -- Spring 2026} \\[0.5\baselineskip]
+{\Large \bf Final Exam} \\[0.3\baselineskip]
+May 28, 2026 \\[0.3\baselineskip]
+Instructor: Mikkel Plagborg-Moller
+\end{center}
+
+\bigskip
+
+\begin{itemize}
+\item You have 2 hours to complete the following 7 problems.
+\item The test is closed-book. You may consult a calculator and two double-sided sheets of handwritten notes.
+\item The total number of points is 100.
+\item The problems have not been ordered in terms of difficulty. Most questions can be answered independently of each other.
+\item \textbf{Show your work}. State several significant digits for every numerical answer.
+\item \textbf{Partial answers will receive partial credit.} Do not leave questions empty. However, points may be subtracted for long, irrelevant remarks.
+\item Good luck!
+\end{itemize}
+
+\clearpage
+
+\subsection*{Problem 1 (15 points total)}
+Consider the bivariate SVAR(1) model
+\begin{align*}
+y_{1t} &= 1 + 0.9 y_{1,t-1} + \varepsilon_{1t}, \\
+y_{2t} &= 0.5y_{1,t-1} + 0.7 y_{2,t-1} + \varepsilon_{1t} + \varepsilon_{2t},
+\end{align*}
+where the shocks $\lbrace \varepsilon_{1t} \rbrace$ and $\lbrace \varepsilon_{2t} \rbrace$ are mutually independent and each i.i.d.\ standard normal.
+
+\begin{enumerate}[i)]
+\item (5 points.) Argue that the vector process $\lbrace (y_{1t},y_{2t})' \rbrace$ is covariance stationary for some choice of initial conditions $(y_{10},y_{20})'$. You do not need to specify what is required of the initial conditions.
+%\item (5 points.) Compute $\cov(y_{1t},y_{2t})$.
+\item (5 points.) Compute the impulse response of $y_{2t}$ with respect to $\varepsilon_{1t}$ at horizon 1.
+\item (5 points.) Compute the FEVD of $y_{1t}$ with respect to $\varepsilon_{2t}$ at horizon 5.
+\end{enumerate}
+
+\subsection*{Problem 2 (8 points)}
+A central bank sets the nominal interest rate $r_t$ according to the rule
+\[r_t = c + \varphi_\pi E_t[\pi_{t+1}] + \varphi_y E_t[y_{t+1}] + \rho r_{t-1} + \varepsilon_t,\]
+where $\pi_t$ is inflation, $y_t$ is real GDP, and $\varepsilon_t$ is an unobserved disturbance. $E_t[x_{t+1}]$ denotes the expectation of any variable $x_{t+1}$ conditional on all publicly available data up to time $t$. The publicly available data includes all current and lagged values of $(\pi_t,y_t,r_t)$. Assume that $\varepsilon_t$ is a monetary policy shock in the sense that $E_{t-1}[\varepsilon_t]=0$. Assume finally that all the series above are stationary and weakly dependent.
+
+Propose a consistent estimator of the parameters $(c,\varphi_\pi,\varphi_y,\rho)$ given data $\lbrace r_t,\pi_t,y_t \rbrace_{t=1}^T$. Define your estimator as precisely as possible. Appeal to results from lecture to explain why your estimator is consistent under the above assumptions (and mild regularity conditions), though you do not need to formally prove consistency.
+
+\subsection*{Problem 3 (14 points total)}
+You're interested in estimating the causal effect of government spending shocks on real GDP. Through historical research you've identified a country where the systematic policy rule for government spending satisfies the following criteria:
+\begin{itemize}
+\item Due to legislative inertia, government spending responds with a lag to the state of the economy.
+\item Legislators do not want to change the level of government spending too much from quarter to quarter.
+\item Civil servants who implement the government's plan have some discretion to change spending in response to monetary policy shocks within the same quarter.
+\end{itemize}
+These facts suggest modeling the government spending process as
+\[g_t = c + \rho g_{t-1} + b y_{t-1} + d \varepsilon_{M,t} + \varepsilon_{G,t},\]
+where $g_t$ is log government spending, $y_t$ is log real GDP, $\varepsilon_{M,t}$ is the monetary policy shock, $\varepsilon_{G,t}$ is the government spending shock, $(c,\rho,b,d)$ are parameters, and time $t$ is quarterly. Assume all shocks in the economy (including $\varepsilon_{M,t}$ and $\varepsilon_{G,t}$) are i.i.d.\ and mutually independent.
+
+You collect official data on $g_t$ and $y_t$, and you construct a direct measure of the monetary policy shock $\varepsilon_{M,t}$ using a high-frequency identification approach. Assume for simplicity that these three variables are measured without error.
+
+\begin{enumerate}[i)]
+\item (7 points.) How would you order the observed variables $(g_t,y_t,\varepsilon_{M,t})$ in a SVAR in order to estimate the impulse response function of $y_t$ with respect to $\varepsilon_{G,t}$? Explain.
+\item (7 points.) How would you estimate the impulse response function in part (i) using local projections? Be specific about which regressions you would run and which coefficients you would focus on.
+\end{enumerate}
+
+\subsection*{Problem 4 (12 points total)}
+Suppose $\lbrace y_t \rbrace$ follows the AR(2) process
+\[y_t = a_1 y_{t-1} + a_2 y_{t-2} + u_t,\quad u_t \overset{iid}{\sim} N(0,\sigma_u^2),\]
+with initial conditions $y_0=y_{-1}=0$. However, we do not observe $\lbrace y_t \rbrace$ but instead observe $y_1^*,y_2^*,\dots,y_T^*$, where
+\[y_t^* \equiv y_t + v_t,\quad v_t \overset{iid}{\sim} N(0,\sigma_v^2).\]
+Assume the parameters $(a_1,a_2,\sigma_u^2,\sigma_v^2)$ are known.
+
+\begin{enumerate}[i)]
+\item (6 points.) If $\lbrace u_t \rbrace$ and $\lbrace v_t \rbrace$ are independent processes, how can you compute the optimal forecast $E[y_{T+1} \mid y_T^*,y_{T-1}^*,\dots,y_1^*]$? You do not need to state the precise expression or a fully-specified algorithm, but you should give enough detail so that a research assistant with no time series training could easily look up the required formulas without independent thinking.
+\item (6 points.) How does your answer to part (i) change if instead $v_t = b u_t + w_t$, $w_t \overset{iid}{\sim} N(0,\sigma_w^2)$, and $\lbrace w_t \rbrace$ is independent of $\lbrace u_t \rbrace$? Continue to assume that we know all parameters, including $b$ and $\sigma_w^2$.
+\end{enumerate}
+
+\subsection*{Problem 5 (29 points total)}
+Consider the ARMA$(1,1)$ model
+\begin{equation} \label{eqn:arma}
+y_t = \rho y_{t-1} + u_t + \theta u_{t-1},\quad u_t \overset{iid}{\sim} N(0,\sigma^2), \tag{$\dagger$}
+\end{equation}
+where $\rho \in (-1,1)$, $\theta \in \mathbb{R}$, and $\sigma^2>0$ are constant parameters. The initial value $y_0$ is chosen such that $\lbrace y_t \rbrace$ is a stationary process.
+
+\begin{enumerate}[i)]
+\item (6 points.) Assume $\rho=0$ and $\theta \neq 0$. Show that the process $\lbrace y_t \rbrace$ has exactly the same autocovariances (at all lags $\ell=0,1,2,\dots$) as the process $\lbrace \tilde{y}_t \rbrace$ defined by
+\[\tilde{y}_t = \tilde{u}_t + \frac{1}{\theta}\tilde{u}_{t-1},\quad \tilde{u}_t \overset{iid}{\sim} N(0,\theta^2\sigma^2).\]
+\item (5 points.) Now assume instead that $\rho=-\theta$ and $\theta \in (-1,1)$. Show that none of the autocovariances of the process $\lbrace y_t \rbrace$ depend on the value of $\theta$. [Hint: it's helpful to write the ARMA model using lag polynomial notation.]
+\end{enumerate}
+
+\noindent Consider the Stan model file \texttt{arma.stan} attached at the end of this exam.
+\begin{enumerate}[i)]
+\setcounter{enumi}{2}
+\item (5 points.) Explain why the state space matrices defined in lines 13--15 of the Stan file are appropriate for doing inference on the ARMA$(1,1)$ model \eqref{eqn:arma}.
+\item (5 points.) Explain why line 26 of the Stan file is the correct formula for initializing the Kalman filter at the unconditional variance of the state vector.
+\end{enumerate}
+
+\noindent The following table provides the output from running 4 MCMC chains in Stan, using the model file \texttt{arma.stan} and a data set of length $T=180$. Each MCMC chain consists of 1000 burn-in iterations, followed by 1000 retained iterations.
+
+{\small \setstretch{0.9}
+\begin{verbatim}
+           Mean      MCSE    StdDev       MAD        5%       50%       95%  \
+rho    0.749092  0.052136  0.090487  0.096584  0.609598  0.738875  0.899351   
+theta -0.229287  1.699190  2.426160  1.165850 -4.491640  0.293049  2.870670   
+sigma  0.733872  0.257912  0.369085  0.495641  0.263529  0.828262  1.167420   
+
+       ESS_bulk  ESS_tail  ESS_bulk/s    R_hat  
+rho     7.01458    2000.0    0.524612  1.55567  
+theta   4.89173    2000.0    0.365846  2.41284  
+sigma   5.40297    2000.0    0.404081  2.00731
+\end{verbatim}
+}
+
+\begin{enumerate}[i)]
+\setcounter{enumi}{4}
+\item (4 points.) Taking the above output at face value, what are the posterior mean and equal-tailed 90\% credible interval for $\rho$?
+\item (4 points.) Based on the above output, would you say that the chains have converged and yield sufficiently weakly serially correlated draws for all 3 model parameters? Explain your criteria.
+\end{enumerate}
+
+\subsection*{Problem 6 (10 points total)}
+On a data set $y_1,y_2,\dots,y_T$ with $T=153$, we run the OLS regression:
+\[y_t = \hat{\beta}_0 + \hat{\beta}_1 y_{t-1} + \hat{\beta}_2 \Delta y_{t-1} + \hat{\beta}_3 \Delta y_{t-2} + \hat{\beta}_4 \Delta y_{t-3} + \hat{u}_t.\]
+The results are shown below, with homoskedastic standard errors:
+
+{\small \setstretch{0.9}
+\begin{verbatim}
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.440
+Model:                            OLS   Adj. R-squared:                  0.424
+Method:                 Least Squares   F-statistic:                     28.25
+Date:                Thu, 28 May 2026   Prob (F-statistic):           2.53e-17
+Time:                        10:30:00   Log-Likelihood:                -206.39
+No. Observations:                 149   AIC:                             422.8
+Df Residuals:                     144   BIC:                             437.8
+Df Model:                           4                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0187      0.081      0.231      0.817      -0.141       0.178
+y_lag1         0.4958      0.090      5.533      0.000       0.319       0.673
+Dy_lag1        0.3147      0.091      3.448      0.001       0.134       0.495
+Dy_lag2       -0.0164      0.085     -0.192      0.848      -0.185       0.152
+Dy_lag3        0.0488      0.084      0.580      0.563      -0.117       0.215
+==============================================================================
+\end{verbatim}
+}
+Here \texttt{y\_lag1} denotes $y_{t-1}$, while \texttt{Dy\_lagN} denotes $\Delta y_{t-N}$.
+
+\begin{enumerate}[i)]
+\item (5 points.) If the last four observations in the sample are all equal to 1, what is the optimal one-step-ahead forecast of $y_{T+1}$, given the estimated coefficients?
+\item (5 points.) Test the null hypothesis that $\lbrace y_t \rbrace$ is an AR(4) process with a unit root and no drift against the alternative that the process is stationary. Use a 5\% significance level. If you forgot the precise critical value for the test, you can still get full points if you're in the right ballpark.
+\end{enumerate}
+
+%\subsection*{Problem 7 (7 points)}
+%You are interested in whether the time series $\lbrace x_t \rbrace$ Granger-causes the series $\lbrace y_t \rbrace$, but you are unsure about whether the magnitude of the Granger-causality might have changed at some point during the sample. How can you test the null hypothesis that there was no change in the magnitude of the Granger-causality during the sample period? Describe the procedure concretely, but you do not need to specify the precise critical value for your test.
+
+\subsection*{Problem 7 (12 points total)}
+Indicate whether each of the following statements is \underline{true} or \underline{false}. To receive points, you must justify your answers with very brief arguments.
+
+\begin{enumerate}[i)]
+\item (4 points.) Let $a_1$ and $a_2$ be constants and $u_t \overset{iid}{\sim} (0,1)$. Then the AR(3) process $y_t = 5 + a_1 y_{t-2} + a_2 y_{t-3} + u_t$ has a unit root if and only if the AR(2) process $y_t = -5 + a_1 y_{t-1} + a_2 y_{t-2} + u_t$ also has a unit root.
+\item (4 points.) If $\lbrace y_t \rbrace$ is a pure random walk, then $\Delta^2 y_t \equiv \Delta(\Delta y_t)$ is an MA(1) process.
+\item (4 points.) Let $\bm{y}_t = (y_{1t},y_{2t})'$ satisfy a VAR(1) model
+\[\bm{y}_t = \begin{pmatrix}
+1 & 0 \\
+\gamma & 0
+\end{pmatrix}\bm{y}_{t-1} + \bm{u}_t,\quad \bm{u}_t \overset{iid}{\sim} N(\bm{0},\bm{I}),\]
+where $\gamma$ is a constant. Then the series $y_{1t}$ and $y_{2t}$ are cointegrated with cointegrating relationship $y_{1t}-\gamma y_{2t}$, for any value of $\gamma \neq 0$.
+\end{enumerate}
+
+\clearpage
+
+\setstretch{0.9}
+\lstinputlisting[title={\ttfamily\Large arma.stan}]{code/arma.stan}
+
+\end{document}
+ 

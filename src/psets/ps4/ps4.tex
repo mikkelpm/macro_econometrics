@@ -1,0 +1,114 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amsfonts, amssymb, amsthm, fullpage, color, bbm, enumerate}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage[onehalfspacing]{setspace}
+
+\usepackage[hidelinks]{hyperref}
+%\usepackage[capitalize,nameinlink,noabbrev]{cleveref}
+
+\theoremstyle{plain}
+\newtheorem{asn}{Assumption}
+%\crefname{asn}{Assumption}{Assumptions}
+\newtheorem{lem}{Lemma}
+%\crefname{lem}{Lemma}{Lemmas}
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{claim}{Claim}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\tr}{tr}
+\DeclareMathOperator*{\rk}{rk}
+\DeclareMathOperator*{\spa}{span}
+\DeclareMathOperator*{\ve}{vec}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Rea}{Re}
+\DeclareMathOperator*{\var}{Var}
+\DeclareMathOperator*{\cov}{Cov}
+\DeclareMathOperator*{\corr}{Corr}
+
+\setlength{\skip\footins}{\baselineskip}
+\setlength{\footnotesep}{0.3\baselineskip}
+
+\allowdisplaybreaks
+
+\begin{document}
+
+{\noindent \bf University of Chicago \hfill
+Spring 2026 \\
+Department of Economics \hfill ECMA 31150}
+
+\begin{center}
+{\Large Problem Set 4} \\
+This version: \today \\[1ex]
+Mikkel Plagborg-Moller \\
+\vspace{0.5\baselineskip}
+Due Friday, May 15
+\end{center}
+\vspace{0.2\baselineskip}
+
+\noindent \emph{Please upload your answers on Canvas, with code attached. You are encouraged to collaborate, but please write up your answers independently and do not share code chunks. Use any software you like, although you learn the most by limiting the use of generative AI. If you find any errors or require clarification, please let me know right away.}
+
+\subsection*{Question 1}
+Consider the following bivariate SVAR model:
+\begin{align*}
+y_{1t} &= 1 + 0.7 y_{1,t-1} - 0.2y_{1,t-2} + 0.5 y_{2,t-1} + \varepsilon_{1t} + 0.5\varepsilon_{2t}, \\
+y_{2t} &= 0.3 y_{1,t-1} + 0.9 y_{2,t-1} + 2\varepsilon_{2t},
+\end{align*}
+where $(\varepsilon_{1t},\varepsilon_{2t})'$ is i.i.d.\ with mean zero and identity variance-covariance matrix.
+
+\begin{enumerate}[i)]
+\item Compute the IRFs of $y_{1t}$ and $y_{2t}$ with respect to each of the shocks at horizons $h=0,1,2,\dots,10$. Visualize the results in a clearly labeled $2 \times 2$ plot.
+\item Compute the FEVDs of $y_{1t}$ and $y_{2t}$ with respect to each of the shocks at horizons $h=1,2,\dots,10$. For each of the variables $y_{1t}$ and $y_{2t}$, produce a plot with bars for each horizon, where the total height of each bar is 1, and each bar is split according to the shock shares.
+\item Is there an ordering of the two variables $y_{1t}$ and $y_{2t}$ that would satisfy the Cholesky-identification assumptions?
+\end{enumerate}
+
+\subsection*{Question 2}
+Consider the recursive identification of monetary policy shocks described in the slide deck ``Dynamic causal effects III''. Add 68\% bootstrap confidence bands to the IRF plots on slide 19 of this slide deck, using a recursive residual bootstrap. Use at least 500 bootstrap iterations. [Hint: you may use the code on the course website.]
+
+\subsection*{Question 3}
+Consider a Minnesota prior for the coefficients $a_1,\dots,a_p$ of an AR($p$) model:
+\[a_\ell \sim N\left(m_\ell, \left(\frac{\lambda}{\ell}\right)^2\right),\]
+where the $a_\ell$'s are mutually independent, $m_1 \equiv 1$, $m_\ell \equiv 0$ for $\ell \geq 2$, and $\lambda \equiv 0.2$. When $p=12$, what is the prior probability that $|a_2+a_3+\dots+a_p|>0.5$?
+
+\subsection*{Question 4}
+Consider the following Generalized AutoRegressive Conditional Heteroskedasticity (GARCH) model for a white noise process $\lbrace u_t \rbrace$:
+\[u_t \equiv \sigma_t \zeta_t \quad \text{for all } t,\]
+where
+\[\zeta_t \overset{iid}{\sim} N(0,1) \quad \text{for all } t,\]
+and
+\[\sigma_t^2 = \omega + \gamma u_{t-1}^2 + \delta \sigma_{t-1}^2 \quad \text{for all } t.\]
+
+\begin{enumerate}[i)]
+\item Assuming $\lbrace \sigma_t^2 \rbrace$ is a strictly stationary process, show that its mean equals
+\[E[\sigma_t^2] = \frac{\omega}{1-\gamma-\delta}.\]
+\item Argue that the following conditions are necessary for the process to be well-defined and stationary: $\omega \geq 0$, $\gamma \geq 0$, $\delta \geq 0$, $\gamma+\delta<1$. [Note: you are not asked to prove that these conditions are \emph{sufficient}.]
+\end{enumerate}
+\clearpage
+
+\subsection*{Question 5}
+Go to the St.\ Louis Fed's FRED website and download data on the monthly unemployment rate (FRED code: UNRATE). Only use data until (and including) December 2019.
+
+Consider the following AR($p$) model with GARCH innovations for the unemployment rate $y_t$:
+\[y_t = c + a_1 y_{t-1} + \dots + a_p y_{t-p} + u_t,\]
+where $\lbrace u_t \rbrace$ follows the GARCH model from Question 4. Assume the initial value $\sigma_{p+1}^2$ for the conditional innovation variance equals the unconditional mean of $\lbrace \sigma_t^2 \rbrace$ under stationarity (given the parameters $\omega,\gamma,\delta$), as derived in the previous question.
+
+You are to estimate the model by Bayesian methods. Let the prior be as follows (we impose prior independence between all parameters except $\gamma$ and $\delta$):
+\begin{itemize}
+\item $c \sim N\left(0,10^4\hat{\sigma}_y^2\right)$. Here $\hat{\sigma}_y^2$ is the sample variance of $y_t$.
+\item The AR coefficients $a_1,\dots,a_p$ have the Minnesota prior defined in Question 3.
+\item $\omega \sim N\left(0, (25\hat{\sigma}_y^2)^2\right)$ (i.e., the prior standard deviation of $\omega$ is $25\hat{\sigma}_y^2$).
+\item Finally, the joint prior on $\gamma$ and $\delta$ is proportional to the product of two $\text{Beta}(1.1,1.1)$ densities, but truncated to the region $\gamma+\delta<1$ to ensure stationarity.\footnote{This truncation can be accomplished in Stan by defining \texttt{real<lower=0,upper=1> gamma; real<lower=0,upper=1-gamma> delta;}. Afterwards, the Beta priors on $\gamma$ and $\delta$ are declared as they would be if there were no truncation.}
+\end{itemize}
+Finally, set the lag length $p$ equal to 12.
+
+\begin{enumerate}[i)]
+\item Sample from the joint posterior of all the model parameters. Document that your sampler converged. [Hint: you may use the code on the course website for inspiration.]
+\item Plot histograms of the posterior draws of each of the 3 GARCH parameters. Report 90\% posterior credible intervals for each of these parameters.
+\item Describe an algorithm that uses the posterior draws of the parameters to visualize the \emph{two}-step-ahead predictive distribution of $y_{T+2}$ (i.e., the unemployment rate in February 2020). Be concrete and use mathematical notation. [Note: you do not need to actually implement your algorithm in code.]
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,109 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amsfonts, amssymb, amsthm, fullpage, color, bbm, enumerate}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage[onehalfspacing]{setspace}
+
+\usepackage[hidelinks]{hyperref}
+%\usepackage[capitalize,nameinlink,noabbrev]{cleveref}
+
+\theoremstyle{plain}
+\newtheorem{asn}{Assumption}
+%\crefname{asn}{Assumption}{Assumptions}
+\newtheorem{lem}{Lemma}
+%\crefname{lem}{Lemma}{Lemmas}
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{claim}{Claim}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\tr}{tr}
+\DeclareMathOperator*{\rk}{rk}
+\DeclareMathOperator*{\spa}{span}
+\DeclareMathOperator*{\ve}{vec}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Rea}{Re}
+\DeclareMathOperator*{\var}{Var}
+\DeclareMathOperator*{\cov}{Cov}
+
+\setlength{\skip\footins}{\baselineskip}
+\setlength{\footnotesep}{0.3\baselineskip}
+
+\allowdisplaybreaks
+
+\begin{document}
+
+{\noindent \bf University of Chicago \hfill
+Spring 2026 \\
+Department of Economics \hfill ECMA 31150}
+
+\begin{center}
+{\Large Problem Set 1} \\
+This version: \today \\[1ex]
+Mikkel Plagborg-Moller \\
+\vspace{0.5\baselineskip}
+Due Friday, April 10
+\end{center}
+\vspace{0.2\baselineskip}
+
+\noindent \emph{Please upload your answers on Canvas, with code attached. You are encouraged to collaborate, but please write up your answers independently and do not share code chunks. Use any software you like, although you learn the most by limiting the use of generative AI. If you find any errors or require clarification, please let me know right away.}
+
+\subsection*{Question 1}
+\begin{enumerate}[i)]
+\item \label{itm:i} Consider the AR(2) process
+\[y_t = 2 + \tfrac{5}{6}y_{t-1} - \tfrac{1}{6}y_{t-2} + u_t,\quad u_t \overset{iid}{\sim} N(0,2).\]
+Show that this process is covariance stationary (you may ignore the issue of what the distribution of the initial values needs to be to ensure this). What is the optimal two-step-ahead forecast $y_{t+2|t} \equiv E[y_{t+2} \mid y_t,y_{t-1},y_{t-2},\dots]$? What is the associated MSFE $E[(y_{t+2}-y_{t+2|t})^2]$? [Note: Here we assume the coefficients in the model are known to us, not estimated.]
+\item Now consider the AR(3) process
+\[y_t = 2 - \tfrac{1}{8}y_{t-3} + u_t,\quad u_t \overset{iid}{\sim} N(0,4).\]
+Repeat the same questions as in part (\ref{itm:i}) for this model.
+\end{enumerate}
+
+\subsection*{Question 2}
+Let $\lbrace y_t \rbrace$ be a covariance stationary AR($p_y$) process:
+\[a(L)y_t=u_t, \quad u_t \sim \mathit{WN}(\sigma_u^2),\quad a(L) \equiv 1-\sum_{\ell=1}^{p_y} a_\ell L^\ell.\]
+Let $\lbrace z_t \rbrace$ be a covariance stationary AR($p_z$) process:
+\[b(L)z_t=v_t, \quad v_t \sim \mathit{WN}(\sigma_v^2),\quad b(L) \equiv 1-\sum_{\ell=1}^{p_z} b_\ell L^\ell.\]
+Assume that $\lbrace u_t \rbrace$ and $\lbrace v_t \rbrace$ are independent processes. Define $w_t \equiv y_t+z_t$ for all $t$. Show that $\lbrace w_t \rbrace$ is an ARMA($p,q$) process, where $p \equiv p_y+p_z$ and $q \equiv \max\lbrace p_y,p_z \rbrace$. [Hint: What does $a(L)b(L)w_t$ equal?]
+
+%\subsection*{Question 3}
+%Consider the AR(1) model
+%\[y_t = \rho y_{t-1} + u_t,\quad u_t \overset{iid}{\sim} N(0,\sigma^2).\]
+%\begin{enumerate}[i)]
+%\item Argue that the likelihood function (conditional on the initial observation $y_1$) can be written
+%\[L(y_2,\dots,y_T \mid y_1,\rho,\sigma^2) = \prod_{t=2}^T p_N(y_t; \rho y_{t-1},\sigma^2),\]
+%where $p_N(x;\mu,\tau^2)$ is the density evaluated at point $x$ of the $N(\mu,\tau^2)$ distribution.
+%\item Prove that the MLE of $\rho$, based on the above likelihood, is given by the OLS estimator
+%\[\hat{\rho} = \frac{\sum_{t=2}^T y_t y_{t-1}}{\sum_{t=2}^T y_{t-1}^2}.\]
+%\end{enumerate}
+
+\subsection*{Question 3}
+\begin{enumerate}[i)]
+\item Consider a stationary AR(1) model
+\[y_t = \rho y_{t-1} + u_t,\quad u_t \overset{iid}{\sim} (0,\sigma_u^2),\]
+where $|\rho|<1$ and $\sigma_u^2 < \infty$. Here the notation ``$u_t \overset{iid}{\sim} (0,\sigma_u^2)$'' means that $u_t$ is i.i.d.\ over time with mean zero and variance $\sigma_u^2$. Prove that
+\[\hat{\delta} \equiv \frac{1}{T}\sum_{t=1}^T u_t y_{t-1} \overset{p}{\to} 0\quad \text{as} \quad T\to\infty.\]
+[Hint: First argue that the product $u_t y_{t-1}$ is serially uncorrelated. Then compute the mean and variance of $\hat{\delta}$. Finally, apply Chebyshev's inequality.]
+\item Now consider the MA(1) model
+\[y_t = u_t + \theta u_{t-1},\quad u_t \overset{iid}{\sim} (0,\sigma_u^2),\]
+where $\sigma_u^2<\infty$. Prove that
+\[\hat{\mu} \equiv \frac{1}{T}\sum_{t=1}^T y_t \overset{p}{\to} 0\quad \text{as} \quad T\to\infty.\]
+[Hint: The argument will have to be slightly different from before, since $y_t$ is no longer serially uncorrelated.]
+\end{enumerate}
+
+\subsection*{Question 4}
+Go to the St.\ Louis Fed's FRED website and download the IMF's Global Price Index of All Commodities (series code: PALLFNFINDEXM). For all the statistical analysis below, \underline{only use data until (and including) December 2025}. Transform the data to logged first differences prior to the following analysis.
+
+\begin{enumerate}[i)]
+\item Plot the resulting time series.
+\item Test whether the series is white noise, based on an AR(12) regression. Allow for heteroskedastic shocks.
+\item Plot the BIC and AIC criteria for AR($p$) models of order $p=1,2,\dots,24$. Which order is selected by the two criteria?
+\item Using the AIC-selected lag order, estimate an AR model and report heteroskedasticity-robust standard errors for the coefficients. Also report an estimate of the innovation variance.
+\item Now assuming an AR(1) model, forecast the values of the series in January and February of 2026. Since we actually do observe data for these months, you can compute the forecast errors of the two predictions -- report them.
+\item Now assuming an AR(1) model with i.i.d.\ normally distributed shocks, report a 90\% forecast interval for the series in February 2026 (two periods ahead). Does the interval contain the actual realized value? [Note: we did not explicitly discuss in lecture how to form multi-step forecast intervals, but you should be able to work out the logic.]
+\end{enumerate}
+
+
+\end{document}

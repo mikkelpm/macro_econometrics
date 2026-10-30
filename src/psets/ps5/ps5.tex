@@ -1,0 +1,97 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amsfonts, amssymb, amsthm, fullpage, color, bbm, enumerate}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage[onehalfspacing]{setspace}
+
+\usepackage[hidelinks]{hyperref}
+%\usepackage[capitalize,nameinlink,noabbrev]{cleveref}
+
+\theoremstyle{plain}
+\newtheorem{asn}{Assumption}
+%\crefname{asn}{Assumption}{Assumptions}
+\newtheorem{lem}{Lemma}
+%\crefname{lem}{Lemma}{Lemmas}
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{claim}{Claim}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\tr}{tr}
+\DeclareMathOperator*{\rk}{rk}
+\DeclareMathOperator*{\spa}{span}
+\DeclareMathOperator*{\ve}{vec}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Rea}{Re}
+\DeclareMathOperator*{\var}{Var}
+\DeclareMathOperator*{\cov}{Cov}
+\DeclareMathOperator*{\corr}{Corr}
+
+\setlength{\skip\footins}{\baselineskip}
+\setlength{\footnotesep}{0.3\baselineskip}
+
+\allowdisplaybreaks
+
+\begin{document}
+
+{\noindent \bf University of Chicago \hfill
+Spring 2026 \\
+Department of Economics \hfill ECMA 31150}
+
+\begin{center}
+{\Large Problem Set 5} \\
+This version: \today \\[1ex]
+Mikkel Plagborg-Moller \\
+\vspace{0.5\baselineskip}
+Due Friday, May 22
+\end{center}
+\vspace{0.2\baselineskip}
+
+\noindent \emph{Please upload your answers on Canvas, with code attached. You are encouraged to collaborate, but please write up your answers independently and do not share code chunks. Use any software you like, although you learn the most by limiting the use of generative AI. If you find any errors or require clarification, please let me know right away.}
+
+\subsection*{Question 1}
+Consider the ``local level'' state space model
+\[y_t = s_t + v_t,\quad s_t = s_{t-1} + u_t,\quad \begin{pmatrix}
+u_t \\
+v_t
+\end{pmatrix} \overset{iid}{\sim} N\left(\begin{pmatrix}
+0 \\
+0
+\end{pmatrix}, \begin{pmatrix}
+\sigma_u^2 & 0 \\
+0 & \sigma_v^2
+\end{pmatrix} \right).\]
+We observe $\lbrace y_t \rbrace_{t=1}^T$, while $\lbrace s_t,u_t,v_t \rbrace$ are latent.
+
+\begin{enumerate}[i)]
+\item Define $y_{t|t-1} \equiv E[y_t \mid y_{t-1},y_{t-2},\dots,y_1]$. Use the Kalman filter to show that
+\[y_{t+1|t} = (1-\kappa_t) y_{t|t-1} + \kappa_t y_t,\quad \text{for } t=2,3,\dots,T,\]
+where $\kappa_t \equiv p_t/(p_t + \sigma_v^2)$, and $p_t$ satisfies the recursion
+\[p_t = \sigma_u^2 + \sigma_v^2\kappa_{t-1}.\]
+\item It can be shown that as $t \to \infty$, $p_t$ converges to a limit $\bar{p} \equiv \lim_{t \to \infty} p_t$ (you do not need to prove this). Show that
+\[\bar{p} = \frac{\sigma_u^2 + \sqrt{\sigma_u^4 + 4\sigma_u^2\sigma_v^2}}{2}.\]
+
+\end{enumerate}
+
+\subsection*{Question 2}
+The data set {\tt local\_level.csv} on the course website contains $T=200$ periods of data $\lbrace y_t,s_t\rbrace$ simulated from the model in Question 1. The true parameters are $\sigma_u=0.1$ and $\sigma_v=1$ (these are standard deviations, not variances).
+
+\begin{enumerate}[i)]
+\item Apply the Kalman filter and smoother to the observed data $\lbrace y_t \rbrace_{t=1}^T$ to infer the evolution of the latent state $\lbrace s_t \rbrace_{t=1}^T$, using the true parameter values. To initialize the Kalman filter, assume $s_0 \sim N(0,100)$. Plot the time series of filtered values $s_{t|t}$ and smoothed values $s_{t|T}$ against the actual values $s_t$ recorded in the data file.
+
+\item Plot the one-step-ahead forecasts $E[y_t \mid y_{t-1},y_{t-2},\dots,y_1]$ from the Kalman filter for $t=1,2,\dots,T$. Overlay a plot of the time series\footnote{This heuristic forecasting formula is called ``exponential smoothing'', though it should not be confused with the output of the Kalman smoother (the latter is not a forecasting algorithm).}
+\[\hat{y}_t \equiv (1- 0.905) \times \sum_{\ell=1}^{t-1} (0.905)^{\ell-1} y_{t-\ell},\quad t=1,2,\dots,T.\]
+You should see that the two series look almost identical, except for the first 20 observations or so. How does Question 1 explain this phenomenon?
+\end{enumerate}
+
+\subsection*{Question 3}
+Go to the St.\ Louis Fed's FRED database and download the monthly real narrow effective U.S. dollar exchange rate series as calculated by the Bank for International Settlements (FRED ID: RNUSBIS). Use the full available sample. Transform the exchange rate to logs.
+
+\begin{enumerate}[i)]
+\item Use an augmented Dickey-Fuller t-test to test the null hypothesis that the log real exchange rate series has a unit root against the alternative that the series is stationary (with a possibly non-zero mean). Control for 4 lags of first-differenced data in the specification, and use a 5\% significance level.
+\end{enumerate}
+
+\end{document}

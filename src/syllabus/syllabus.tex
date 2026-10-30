@@ -1,0 +1,255 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amsfonts,fullpage,enumerate}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage[onehalfspacing]{setspace}
+\usepackage{titlesec}
+\renewcommand{\thesection}{}% Remove section references...
+\renewcommand{\thesubsection}{\arabic{subsection}}%... from subsections
+
+\begin{document}
+{\noindent \bf University of Chicago \hfill
+Spring 2026 \\
+Department of Economics \hfill ECMA 31150}
+
+\bigskip
+\begin{center}
+{\large\bf Econometric Methods for Macroeconomics} \\
+Syllabus (\today)
+\end{center}
+\bigskip
+
+\noindent
+\begin{tabular}{ll}
+Instructor: & Mikkel Plagborg-Moller, mikkelpm@uchicago.edu\\[1ex]
+Lectures: & Tue/Thu 11.00am--12.20pm, SHFE 203 \\[1ex]
+Office hours: & Wed 11.00am--12.00pm, SHFE 316 \\[1ex]
+TA discussion: & Mon 5.30--6.20pm, SHFE 203 \\[1ex]
+Website: & \url{https://canvas.uchicago.edu/courses/70812} \\
+\end{tabular}
+
+\paragraph{Description.}
+Modern econometric methods for macroeconomic research with time series and panel data. Topics covered include forecasting, estimation of dynamic causal effects using vector autoregressions and local projections, state space models, and Bayesian estimation. The methods are illustrated with applications to current debates in economic policy. The course emphasizes concepts and coding, rather than mathematical proofs.
+
+\paragraph{Prerequisites.}
+Introductory probability and statistics, introductory econometrics, introductory linear algebra, intermediate macroeconomic theory, and basic coding. Important prerequisite concepts include the following:
+\begin{enumerate}
+\item Probability: density{\slash}mean{\slash}variance{\slash}covariance for random \emph{vectors}, multivariate normal distribution, independence, conditional density{\slash}mean{\slash}variance, law of large numbers, central limit theorem.
+\item Statistics: parameter, estimator, bias, mean squared error, standard error, confidence interval, randomized experiment, maximum likelihood estimator.
+\item Linear algebra: matrix multiplication, matrix inverse, eigenvalues.
+\item Econometrics: OLS, heteroskedasticity-robust standard errors, t-test, F-test, instrumental variables, two-stage least squares, fixed effects estimator for panel data.
+\end{enumerate}
+
+\paragraph{Material.}
+There is no required textbook for the course. Handouts will be made available on the website. Attached to this syllabus is a list of \underline{optional} readings that are useful for a deeper understanding of the material.
+
+Some students might find it useful to have a textbook as an additional reference. Good reference books include:
+\begin{description}
+\item Brockwell, P. J., and Davis, R. A. (2016). \emph{Introduction to Time Series and Forecasting}. 3rd edition, Springer. (Great for statistical concepts but does not focus on economic applications. Undergraduate level. PDF available for free via the University library website.)
+\item Hamilton, J. D. (1994). \emph{Time Series Analysis}. Princeton University Press. (Comprehensive reference for time series econometrics methods developed before the mid-1990s. Graduate level.)
+\item Hayashi, F. (2000). \emph{Econometrics}. Princeton University Press. (Contains an accessible introduction to time series models and asymptotics. Graduate level.)
+\item Herbst, E. P., and Schorfheide, F. (2015). \emph{Bayesian Estimation of DSGE Models}. Princeton University Press. (Excellent introduction to Bayesian inference in structural time series models. Graduate level.)
+\item Stock, J. H., and Watson, M. W. (2019). \emph{Introduction to Econometrics}. 4th edition, Pearson. (General introduction to econometrics, with chapters 15--17 focusing on time series data. Undergraduate level.)
+\end{description}
+
+\paragraph{Lecture format.}
+Lectures and TA sessions will be in person, barring exceptional circumstances. Attendance is expected but not mandatory. Students may not record lectures, TA sessions, or office hours without the express permission of the instructor and TA.
+
+\paragraph{Homework.}
+Problem sets will be posted on the course website approximately every 1--2 weeks. They will be due on Fridays. \underline{Your lowest problem set score will not count} towards your grade, so you may drop one problem set entirely if you wish. For this reason, \underline{late submissions are not accepted} under any circumstances.
+
+Students are encouraged to collaborate on the problem sets, but answers and computer code must be typed up independently. The problem sets will be graded coarsely, i.e., a full score will be given as long as the work demonstrates dedication and thoughtfulness. We reserve the right to subtract points for sloppy exposition, including unreadable code. If you find a grading error, please resubmit your problem set to the TA along with a one-paragraph explanation; we reserve the right to re-grade the entire problem set.
+
+\paragraph{Exams.}
+There will be two exams: a 75-minute in-class midterm exam and a 2-hour final exam. Both exams are closed book. No make-up exams will be offered. If a student misses the midterm due to an emergency, the final exam grade will be appropriately re-weighted.
+
+\paragraph{Grading.}
+The final course grade will be a monotonic function of the weighted average of (i) the average problem set score, excluding the lowest one (20\% weight), (ii) the midterm score (30\% weight), and (iii) the final exam score (50\% weight).
+
+\paragraph{Computer work and AI.}
+The problem sets will involve substantial programming tasks. The course materials will emphasize Python code, but students are free to use whatever programming language they prefer.
+
+While students are encouraged to think and code on their own as a way to understand the course material, the use of AI tools is allowed on all problem sets. No citation is required.
+
+\paragraph{Code of conduct.}
+Students are expected to comply with University regulations regarding honest work. If you are in doubt about what constitutes academic dishonesty, speak with me before the assignment is due. Failure to maintain academic integrity on an assignment will result in a penalty befitting the violation, up to and including failing the course and further University sanctions. For more information, consult the student manual.
+
+\paragraph{Accommodations for students with disabilities.}
+The University of Chicago is committed to ensuring equitable access to our academic programs and services. Students with disabilities who have been approved for the use of academic accommodations by Student Disability Services (SDS) and need reasonable accommodation(s) to participate fully in this course should follow the procedures established by SDS for using accommodations. Timely notifications are required to ensure that your accommodations can be implemented. Please meet with me to discuss your access needs in this class after you have completed the SDS procedures for requesting accommodations.
+
+\paragraph{Important dates.}
+%These dates are preliminary. Changes will be announced via course email.
+\begin{description}
+\item[\phantom{*}] Mar 24 (Tue): First class
+\item[\phantom{*}] Apr 21 (Tue): Midterm exam
+\item[\phantom{*}] May 21 (Thu): Last class
+\item[\phantom{*}] May 28 (Thu): Final exam
+\end{description}
+
+\paragraph{Course outline.}
+The following outline is preliminary and may change without warning.
+\begin{enumerate}
+\item Forecasting with stationary models.
+	\begin{enumerate}[i)]
+	\item Stationarity.
+	\item Autocorrelation function.
+	\item ARMA models, estimation, prediction.
+	\item Model selection.
+	\item Forecasting: point, interval, multi-step, evaluation.
+	\end{enumerate}
+\item Vector autoregression.
+	\begin{enumerate}[i)]
+	\item Autoregressive distributed lag models.
+	\item VAR(MA) models.
+	\item Bootstrap.
+	\end{enumerate}
+\item Inference with weakly dependent data.
+	\begin{enumerate}[i)]
+	\item Standard errors for time series regressions.
+	\item Instrumental variables.
+	\end{enumerate}
+\item Dynamic causal effects.
+	\begin{enumerate}[i)]
+	\item Local projections, identification through timing restrictions.
+	\item Impulse responses, SVMA and SVAR models, relationship with structural models.
+	\item Identification through instruments/proxies.
+	\item Panel data.
+	\end{enumerate}
+\item Bayesian estimation.
+	\begin{enumerate}[i)]
+	\item Bayesian VARs.
+	\item Introduction to MCMC and Stan.
+	\item Density forecast, time-varying volatility.
+	\end{enumerate}
+\item State space models.
+	\begin{enumerate}[i)]
+	\item Linear-Gaussian models, Kalman filter and smoother.
+	\item Dynamic factor models, nowcasting.
+	\item Regime switching.
+	\end{enumerate}
+\item Non-stationary models.
+	\begin{enumerate}[i)]
+	\item Deterministic trends.
+	\item Unit roots, stochastic trends.
+	\item Spurious regression, cointegration.
+	\item ARIMA models.
+	\item Structural breaks.
+	\item Seasonality.
+	\end{enumerate}
+\end{enumerate}
+
+\clearpage
+
+\section*{Optional reading list}
+The reading list is preliminary and may be updated continuously throughout the course without warning. Items marked with a star (*) are accessible introductory readings.
+
+\subsection{Forecasting with stationary models}
+\begin{description}
+\item Brockwell and Davis: chapters 1--3, 5.
+\item Hamilton: chapters 2--4.
+\item Hayashi: chapters 6.1--6.2, 6.4.
+\item[*] Stock and Watson: chapters 15.1--15.6, 17.2.
+\item Claeskens, G., and Hjort, N. L. (2008). \emph{Model Selection and Model Averaging}. Cambridge University Press. Chapters 1--4.
+\item[*] Stock, J. H., and Watson, M. W. (2017). ``Twenty Years of Time Series Econometrics in Ten Pictures.'' \emph{Journal of Economic Perspectives} 31(2), 59--86.
+\end{description}
+
+\subsection{Vector autoregression}
+\begin{description}
+\item Brockwell and Davis: chapter 8.
+\item Hamilton: chapters 10--11.
+\item Hayashi: chapters 6.3--6.4.
+\item[*] Stock and Watson: chapters 16.1--16.3, 17.1--17.2.
+\item Kilian, L., and L\"{u}tkepohl, H. (2017). \emph{Structural Vector Autoregressive Analysis}. Cambridge University Press. Chapters 2, 12.1--12.5.
+\item[*] Stock, J. H., and Watson, M. W. (1999). ``Business Cycle Fluctuations in US Macroeconomic Time Series.'' In \emph{Handbook of Macroeconomics, Volume 1A}, edited by Taylor, J. B., and Woodford, M., North-Holland, chapter 1, 3--64.
+\item Stock, J. H., and Watson, M. W. (2003). ``Forecasting Output and Inflation: The Role of Asset Prices.'' \emph{Journal of Economic Literature} 41(3), 788--829.
+\end{description}
+
+\subsection{Inference with weakly dependent data}
+\begin{description}
+\item Hamilton: chapter 7.
+\item Hayashi: chapters 6.5--6.6.
+\item[*] Stock and Watson: chapter 16.4.
+\item Andrews, I., Stock, J. H., and Sun, L. (2019). ``Weak Instruments in Instrumental Variables Regression: Theory and Practice.'' \emph{Annual Review of Economics} 11, 727--753.
+\item Fuhrer, J. C., and Rudebusch, G. D. (2004). ``Estimating the Euler equation for output.'' \emph{Journal of Monetary Economics} 51(6), 1133--1153.
+\item Lazarus, E., Lewis, D. J., Stock, J. H., and Watson, M. W. (2018). ``HAR Inference: Recommendations for Practice.'' \emph{Journal of Business \& Economic Statistics} 36(4), 541--559. With comments and rejoinder.
+\item Mankiw, N. G., Reis, R., and Wolfers, J. (2004). ``Disagreement about Inflation Expectations.'' \emph{NBER Macroeconomics Annual} 18, 209--248.
+\item Mavroeidis, S., Plagborg-M{\o}ller, M., and Stock, J. H. (2014). ``Empirical Evidence on Inflation Expectations in the New Keynesian Phillips Curve.'' \emph{Journal of Economic Literature} 52(1), 124--188.
+\end{description}
+
+\subsection{Dynamic causal effects}
+\begin{description}
+\item Antol\'{i}n-D\'{i}az, J., and Surico, P. (2025). ``The Long-Run Effects of Government Spending.'' \emph{American Economic Review} 115(7), 2376--2413.
+\item Bauer, M. D., and Swanson, E. T. (2023). ``A Reassessment of Monetary Policy Surprises and High-Frequency Identification.'' \emph{NBER Macroeconomics Annual} 37, 87--155.
+\item Bilal, A., and K\"{a}nzig, D. R. (2026). ``The Macroeconomic Impact of Climate Change: Global vs.\ Local Temperature.'' \emph{Quarterly Journal of Economics} 141(2), 889--944.
+\item Gertler, M., and Karadi, P. (2015). ``Monetary Policy Surprises, Credit Costs, and Economic Activity.'' \emph{American Economic Journal: Macroeconomics} 7(1), 44--76.
+\item Jord\`{a}, \`{O}., Schularick, M., and Taylor, A. M. (2013). ``When Credit Bites Back.'' \emph{Journal of Money, Credit and Banking} 45(s2), 3--28.
+\item K\"{a}nzig, D. R. (2021). ``The Macroeconomic Effects of Oil Supply News: Evidence from OPEC Announcements.'' \emph{American Economic Review} 111(4), 1092--1125.
+\item Miranda-Agrippino, S., Hac{\i}o\u{g}lu-Hoke, S., and Bluwstein, K. (2025). ``Patents, News, and Business Cycles.'' \emph{Review of Economic Studies}, forthcoming.
+\item[*] Montiel Olea, J. L., Plagborg-M{\o}ller, M., Qian, E., and Wolf, C. K. (2026). ``Local Projections or VARs? A Primer for Macroeconomists.'' \emph{NBER Macroeconomics Annual} 40, 111--152.
+\item[*] Ramey, V. A. (2016). ``Macroeconomic Shocks and Their Propagation.'' In \emph{Handbook of Macroeconomics, Volume 2A}, edited by Taylor, J. B., and Uhlig, H., Elsevier, chapter 2, 71--162.
+\item Romer, C. D., and Romer, D. H. (2004). ``A New Measure of Monetary Shocks: Derivation and Implications.'' \emph{American Economic Review} 94(4), 1055--1084.
+\item Stock, J. H., and Watson, M. W. (2018). ``Identification and Estimation of Dynamic Causal Effects in Macroeconomics Using External Instruments.'' \emph{Economic Journal} 128(610), 917--948.
+\end{description}
+
+\subsection{Bayesian estimation}
+\begin{description}
+\item Brockwell and Davis: chapter 7.
+\item Hamilton: chapter 12.
+\item[*] Herbst and Schorfheide: chapters 3.1--3.2, 4.
+\item Stock and Watson: chapter 17.5.
+\item Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and Rubin, D. B. (2014). \emph{Bayesian Data Analysis}. 3rd edition, Chapman \& Hall/CRC. Chapters 10--12. \\ Available online: \url{https://sites.stat.columbia.edu/gelman/book/BDA3.pdf}
+\item Giannone, D., Lenza, M., and Primiceri, G. E. (2015). ``Prior Selection for Vector Autoregressions.'' \emph{Review of Economics and Statistics} 97(2), 436--451.
+\item Lenza, M., and Primiceri, G. E. (2022). ``How to estimate a vector autoregression after March 2020.'' \emph{Journal of Applied Econometrics} 37(4), 688--699.
+\item Stan Development Team (2026). \emph{Stan User's Guide}, Version 2.38. \\ \url{https://mc-stan.org/docs/stan-users-guide/}
+\end{description}
+
+\subsection{State space models}
+\begin{description}
+\item Brockwell and Davis: chapter 9.
+\item Hamilton: chapters 13--14 and 22.
+\item Hayashi: chapter 7.
+\item[*] Herbst and Schorfheide: chapters 1--3.
+\item[*] Stock and Watson: chapter 17.6.
+\item Almuzara, M., Baker, K., O'Keeffe, H., and Sbordone, A. M. (2023). ``The New York Fed Staff Nowcast 2.0.'' New York Fed Staff Technical Paper.
+\item Aruoba, S. B., Diebold, F. X., Nalewaik, J., Schorfheide, F., and Song, D. (2016). ``Improving GDP measurement: A measurement-error perspective.'' \emph{Journal of Econometrics} 191(2), 384--397.
+\item[*] Bok, B., Caratelli, D., Giannone, D., Sbordone, A. M., and Tambalotti, A. (2018). ``Macroeconomic Nowcasting and Forecasting with Big Data.'' \emph{Annual Review of Economics} 10, 615--643.
+\item Christiano, L., Eichenbaum, M., and Evans, C. (2005). ``Nominal Rigidities and the Dynamic Effects of a Shock to Monetary Policy.'' \emph{Journal of Political Economy} 113(1), 1--45.
+\item Cocci, M. D., and Plagborg-M{\o}ller, M. (2025). ``Standard Errors for Calibrated Parameters.'' \emph{Review of Economic Studies} 92(5), 2952--2978.
+\item Durbin, J., and Koopman, S. J. (2012). \emph{Time Series Analysis by State Space Methods}. 2nd edition, Oxford University Press.
+\item[*] Mancini Griffoli, T. (2013). ``Dynare User Guide.'' Sections 3, 5.
+\item[*] Nakamura, E., and Steinsson, J. (2018). ``Identification in Macroeconomics.'' \emph{Journal of Economic Perspectives} 32(3), 59--86.
+\item Sims, C. A., and Zha, T. (2006). ``Were There Regime Switches in U.S. Monetary Policy?'' \emph{American Economic Review} 96(1), 54--81.
+\item Smets, F., and Wouters, R. (2007). ``Shocks and Frictions in US Business Cycles: A Bayesian DSGE Approach.'' \emph{American Economic Review} 97(3), 586--606.
+\item Stock, J. H., and Watson, M. W. (2016). ``Dynamic Factor Models, Factor-Augmented Vector Autoregressions, and Structural Vector Autoregressions in Macroeconomics.'' In \emph{Handbook of Macroeconomics, Volume 2A}, edited by Taylor, J. B., and Uhlig, H., Elsevier, chapter 8, 415--525. Sections 1--3, 5--6.
+\end{description}
+
+\subsection{Non-stationary models}
+\begin{description}
+\item Brockwell and Davis: chapter 6.
+\item Hamilton: chapters 15--20.
+\item Hayashi: chapters 9--10.
+\item[*] Stock and Watson: chapters 15.7--15.8, 17.3--17.4.
+\item Hamilton, J. D. (2018). ``Why You Should Never Use the Hodrick-Prescott Filter.'' \emph{Review of Economics and Statistics} 100(5), 831--843.
+\item[*] Hansen, B. E. (2001). ``The New Econometrics of Structural Change: Dating Breaks in U.S. Labor Productivity.'' \emph{Journal of Economic Perspectives} 15(4), 117--128.
+\item Nelson, C. R., and Plosser, C. I. (1982). ``Trends and random walks in macroeconomic time series: Some evidence and implications.'' \emph{Journal of Monetary Economics} 10(2), 139--162.
+\item Steinsson, J. (2008). ``The Dynamic Behavior of the Real Exchange Rate in Sticky Price Models.'' \emph{American Economic Review} 98(1), 519--533.
+\item Stock, J. H., and Watson, M. W. (1996). ``Evidence on Structural Instability in Macroeconomic Time Series Relations.'' \emph{Journal of Business \& Economic Statistics} 14(1), 11--30.
+\end{description}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
